@@ -38,11 +38,12 @@ namespace QuandlDemo
             settings.Add("trim_end", "2010-03-28");
 
             // Fetch:
-            List<Candle> data = myQuandl.GetData<Candle>("GOOG/NYSE_IBM", settings);
+            List<CsvFormat> data = myQuandl.GetData<CsvFormat>("GOOG/NYSE_IBM", settings);
 
             // Debug Purposes Only
-            foreach (Candle tick in data) {
-                Console.WriteLine(tick.Time.ToShortDateString() + " H: " + tick.High);
+            foreach (CsvFormat tick in data)
+            {
+                Console.WriteLine(tick.GetTime().ToShortDateString() + " H: " + tick.GetHigh());
             }
             //Pause
             Console.ReadKey();
@@ -50,42 +51,5 @@ namespace QuandlDemo
     }
 
 
-    /// <summary>
-    /// Data format for this quandl request
-    /// </summary>
-    class Candle
-    {
-        public DateTime Time = new DateTime();
-        public Decimal Open = 0;
-        public Decimal High = 0;
-        public Decimal Low = 0;
-        public Decimal Close = 0;
-        public Decimal Volume = 0;
 
-        /// <summary>
-        /// Create our new generic data type:
-        /// </summary>
-        /// <param name="csvLine"></param>
-        public Candle(string csvLine)
-        {
-            try
-            {
-                string[] values = csvLine.Split(',');
-                if (values.Length == 6)
-                {
-                    Time = Convert.ToDateTime(values[0]);
-                    Open = Convert.ToDecimal(values[1]);
-                    High = Convert.ToDecimal(values[2]);
-                    Low = Convert.ToDecimal(values[3]);
-                    Close = Convert.ToDecimal(values[4]);
-                    Volume = Convert.ToDecimal(values[5]);
-                }
-            }
-            catch (Exception err) 
-            {
-                //Write the titles out:
-                Console.WriteLine("Er:" + csvLine);
-            }
-        }
-    }
 }

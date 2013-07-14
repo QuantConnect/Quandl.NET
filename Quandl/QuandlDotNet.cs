@@ -53,12 +53,13 @@ namespace QuandlDotNet
 
         /// <summary>
         /// Fetch the raw string data from Quandl.
+        /// Currently only supports *.csv output format
         /// </summary>
         /// <param name="dataset"> dataset code as per Quandl.com website</param>
         /// <param name="settings"> as per the the Quandl.com website </param>
         /// <param name="format"> format for data to be returned as, default = "csv". Options are "csv", "plain", "json", "xml" </param>
         /// <returns></returns>
-        public string GetRawData(string dataset, Dictionary<string, string> settings, string format = "csv")
+        private string GetRawData(string dataset, Dictionary<string, string> settings, string format = "csv")
         {
             string requestUrl = "";
             string rawData = "";
@@ -97,13 +98,13 @@ namespace QuandlDotNet
             return rawData;
         }
 
-        
         /// <summary>
         /// Principle function for getting data about a given stock
-        /// dataset = dataset code as per Quandl.com website
         /// </summary>
-        /// <param name="dataset"> dataset code as per Quandl.com website</param>
-        /// <param name="settings"> as per the the Quandl.com website</param>
+        /// <typeparam name="T"> Currently only CsvFormat type is supported </typeparam>
+        /// <param name="dataset"> dataset code as per Quandl.com website </param>
+        /// <param name="settings"> as per the the Quandl.com website </param>
+        /// <returns></returns>
         public List<T> GetData<T>(string dataset, Dictionary<string, string> settings)
         {
             //Initialize our generic holder:
@@ -125,6 +126,53 @@ namespace QuandlDotNet
             }
 
             return data;
+        }
+    }
+    /// <summary>
+    /// Data format for this quandl request
+    /// </summary>
+    public class CsvFormat
+    {
+        public DateTime Time = new DateTime();
+        public Decimal Open = 0;
+        public Decimal High = 0;
+        public Decimal Low = 0;
+        public Decimal Close = 0;
+        public Decimal Volume = 0;
+
+        /// <summary>
+        /// Create our new generic data type:
+        /// </summary>
+        /// <param name="csvLine"></param>
+        public CsvFormat(string csvLine)
+        {
+            try
+            {
+                string[] values = csvLine.Split(',');
+                if (values.Length == 6)
+                {
+                    Time = Convert.ToDateTime(values[0]);
+                    Open = Convert.ToDecimal(values[1]);
+                    High = Convert.ToDecimal(values[2]);
+                    Low = Convert.ToDecimal(values[3]);
+                    Close = Convert.ToDecimal(values[4]);
+                    Volume = Convert.ToDecimal(values[5]);
+                }
+            }
+            catch (Exception err)
+            {
+                //Write the titles out:
+                Console.WriteLine("Er:" + csvLine);
+            }
+        }
+    
+        public DateTime GetTime()
+        {
+            return Time;
+        }
+        public Decimal GetHigh()
+        {
+            return High;
         }
     }
 }
