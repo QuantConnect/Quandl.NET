@@ -21,9 +21,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using QuandlDotNet;
+using QuandlDemo;
 
-namespace QuandlDotNet
+namespace QuandlDemo
 {
     class QuandlDemo
     {
