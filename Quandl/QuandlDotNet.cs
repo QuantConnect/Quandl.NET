@@ -109,22 +109,13 @@ namespace QuandlDotNet
         /// <param name="dataset"> dataset code as per Quandl.com website </param>
         /// <param name="settings"> as per the the Quandl.com website </param>
         /// <returns></returns>
-        public List<T> GetData<T>(string dataset, Dictionary<string, string> settings)
+        public List<T> GetData<T>(string dataset, Dictionary<string, string> settings, string format = "csv")
         {
             //Initialize our generic holder:
             List<T> data = new List<T>();
 
-            //Determine formatting type
-            //Will eventually support HTML, Json and XML type... maybe... someday...
-            string format;
-            if (typeof(T) == typeof(CsvFinancialFormat))
-            {
-                format = "csv";
-            }
-            else
-            {
-                throw new Exception("Invalid format type. Please use CsvFormat");
-            }
+            //For user defined data should use CSV since easier to parse into class objects
+            //format = "csv";
 
             //Download the required strings:
             string rawData = GetRawData(dataset, settings, format);
@@ -143,67 +134,5 @@ namespace QuandlDotNet
 
             return data;
         }
-    }
-    /// <summary>
-    /// Data format for Csv financial quandl request
-    /// </summary>
-    public class CsvFinancialFormat
-    {
-        public DateTime Time = new DateTime();
-        public Decimal Open = 0;
-        public Decimal High = 0;
-        public Decimal Low = 0;
-        public Decimal Close = 0;
-        public Decimal Volume = 0;
-        public string InputString;
-         
-
-        /// <summary>
-        /// Create our new generic data type:
-        /// </summary>
-        /// <param name="csvLine"></param>
-        public CsvFinancialFormat(string csvLine)
-        {
-            InputString = csvLine;
-            try
-            {
-                string[] values = csvLine.Split(',');
-                if (values.Length >= 6)
-                {
-                    Time = Convert.ToDateTime(values[0]);
-                    try
-                    {
-                        Volume = Convert.ToDecimal(values[5]);
-                        // Catch formatting issues with regards to days in which no trades occur
-                        // Doesn't work for YAHOO, only GOOG
-                        if (Volume > 0)
-                        {
-                            Open = Convert.ToDecimal(values[1]);
-                            High = Convert.ToDecimal(values[2]);
-                            Low = Convert.ToDecimal(values[3]);
-                            Close = Convert.ToDecimal(values[4]);
-                        }
-                        else
-                        {
-                            // No trades occured, make all open/high/low == close
-                            Open = Convert.ToDecimal(values[4]);
-                            High = Convert.ToDecimal(values[4]);
-                            Low = Convert.ToDecimal(values[4]);
-                            Close = Convert.ToDecimal(values[4]);
-                        }
-                    }
-                    catch (Exception err)
-                    {
-                        Console.WriteLine("Missing Data:" + csvLine);
-                    }
-                }
-            }
-            catch (Exception err)
-            {
-                //Write the titles out:
-                Console.WriteLine("Er:" + csvLine);
-            }
-        }
-       
     }
 }

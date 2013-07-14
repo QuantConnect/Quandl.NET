@@ -54,5 +54,65 @@ namespace QuandlDemo
     }
 
 
+    /// <summary>
+    /// Data format for Csv financial quandl request
+    /// </summary>
+    public class CsvFinancialFormat
+    {
+        public DateTime Time = new DateTime();
+        public Decimal Open = 0;
+        public Decimal High = 0;
+        public Decimal Low = 0;
+        public Decimal Close = 0;
+        public Decimal Volume = 0;
+        public string InputString;
 
+
+        /// <summary>
+        /// Create our new generic data type:
+        /// </summary>
+        /// <param name="csvLine"></param>
+        public CsvFinancialFormat(string csvLine)
+        {
+            InputString = csvLine;
+            try
+            {
+                string[] values = csvLine.Split(',');
+                if (values.Length >= 6)
+                {
+                    Time = Convert.ToDateTime(values[0]);
+                    try
+                    {
+                        Volume = Convert.ToDecimal(values[5]);
+                        // Catch formatting issues with regards to days in which no trades occur
+                        // Doesn't work for YAHOO, only GOOG
+                        if (Volume > 0)
+                        {
+                            Open = Convert.ToDecimal(values[1]);
+                            High = Convert.ToDecimal(values[2]);
+                            Low = Convert.ToDecimal(values[3]);
+                            Close = Convert.ToDecimal(values[4]);
+                        }
+                        else
+                        {
+                            // No trades occured, make all open/high/low == close
+                            Open = Convert.ToDecimal(values[4]);
+                            High = Convert.ToDecimal(values[4]);
+                            Low = Convert.ToDecimal(values[4]);
+                            Close = Convert.ToDecimal(values[4]);
+                        }
+                    }
+                    catch (Exception err)
+                    {
+                        Console.WriteLine("Missing Data:" + csvLine);
+                    }
+                }
+            }
+            catch (Exception err)
+            {
+                //Write the titles out:
+                Console.WriteLine("Er:" + csvLine);
+            }
+        }
+    }
 }
