@@ -24,7 +24,7 @@ using System.Text;
 using System.Net;
 using System.IO;
 
-namespace QuandlDemo
+namespace QuandlDotNet
 {
 
     public class Quandl
