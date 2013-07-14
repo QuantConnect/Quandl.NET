@@ -31,7 +31,6 @@ namespace QuandlDotNet
         // Wrapper Class for Accessing the Quandl.com API
         private const string QUANDL_API_URL = "http://www.quandl.com/api/v1/";
         private string AuthToken;
-        private string Data;
         private string OutputFormat;
 
         /// <summary>
@@ -60,7 +59,7 @@ namespace QuandlDotNet
         /// <param name="dataset"> dataset code as per Quandl.com website</param>
         /// <param name="settings"></param>
         /// <param name="format"></param>
-        public void GetFromQuandl(string dataset, Dictionary<string, string> settings, string format = "csv")
+        public List<T> GetData<T>(string dataset, Dictionary<string, string> settings, string format = "csv") where T : IQuandlData
         {
             /* Princple function for getting data about a give stock 
              * dataset = dataset code as per Quandl.com website
@@ -76,8 +75,14 @@ namespace QuandlDotNet
              *  
              *  In addition any other Quandl.com parameter can be passed
              */
+            
+            string requestUrl = "";
+            string rawData = "";
+            List<T> data = new List<T>();
+
+            //Set the output format:
             OutputFormat = format;
-            string requestUrl;
+
             if (AuthToken == "")
             {
                 requestUrl = QUANDL_API_URL + String.Format("datasets/{0}.{1}?", dataset, format);
@@ -95,27 +100,25 @@ namespace QuandlDotNet
                 }
             }
 
-            WebClient client = new WebClient();
-            Data = client.DownloadString(requestUrl);
-        }
-
-        /// <summary>
-        /// Save the data to a file
-        /// </summary>
-        /// <param name="fileName">Local location to dump data</param>
-        public void WriteToDataFile(string fileName)
-        {
-            /* For debug purposes only
-             */
-            using (StreamWriter outfile = new StreamWriter(fileName + "." + OutputFormat))
+            try
             {
-                outfile.Write(Data);
+                //Prevent 404 Errors:
+                WebClient client = new WebClient();
+                rawData = client.DownloadString(requestUrl);
             }
-        }
+            catch (Exception err) 
+            {
+                throw new Exception("Sorry there was an error and we could not connect to Quandl: " + err.Message);
+            }
 
-        public string GetData()
-        {
-            return Data;
+            string[] lines = rawData.Split(new[] { '\r', '\n' });
+
+            foreach (string line in lines) 
+            {
+                data.Add(new T(line));
+            }
+
+            return data;
         }
     }
 }
