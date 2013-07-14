@@ -54,6 +54,10 @@ namespace QuandlDotNet
         /// <summary>
         /// Fetch the raw string data from Quandl.
         /// </summary>
+        /// <param name="dataset"> dataset code as per Quandl.com website</param>
+        /// <param name="settings"> as per the the Quandl.com website </param>
+        /// <param name="format"> format for data to be returned as, default = "csv". Options are "csv", "plain", "json", "xml" </param>
+        /// <returns></returns>
         public string GetRawData(string dataset, Dictionary<string, string> settings, string format = "csv")
         {
             string requestUrl = "";
@@ -93,15 +97,13 @@ namespace QuandlDotNet
             return rawData;
         }
 
-
+        
         /// <summary>
         /// Principle function for getting data about a given stock
         /// dataset = dataset code as per Quandl.com website
-        /// format = format for data to be returned as, default = "csv". Options are "csv", "plain", "json", "xml"
         /// </summary>
         /// <param name="dataset"> dataset code as per Quandl.com website</param>
-        /// <param name="settings"></param>
-        /// <param name="format"></param>
+        /// <param name="settings"> as per the the Quandl.com website</param>
         public List<T> GetData<T>(string dataset, Dictionary<string, string> settings)
         {
             //Initialize our generic holder:
