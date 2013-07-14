@@ -30,11 +30,17 @@ namespace QuandlDemo
         static void Main(string[] args)
         {
             Quandl myQuandl = new Quandl();
-            Dictionary<string, string> kwargsDemo = new Dictionary<string,string>();
-            kwargsDemo.Add("collapse", "weekly");
-            kwargsDemo.Add("trim_start", "2010-02-01");
-            kwargsDemo.Add("trim_end", "2010-03-28");
-            myQuandl.GetFromQuandl("GOOG/NYSE_IBM", kwargsDemo);
+            
+            // Add the required settings to pull down data:
+            Dictionary<string, string> settings = new Dictionary<string, string>();
+            settings.Add("collapse", "weekly");
+            settings.Add("trim_start", "2010-02-01");
+            settings.Add("trim_end", "2010-03-28");
+
+            // Fetch:
+            myQuandl.GetFromQuandl("GOOG/NYSE_IBM", settings);
+
+            // Debug Purposes Only
             myQuandl.WriteToDataFile("testData");
         }
     }
