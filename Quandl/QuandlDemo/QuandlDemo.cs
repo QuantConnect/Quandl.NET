@@ -34,8 +34,8 @@ namespace QuandlDotNet
             kwargsDemo.Add("collapse", "weekly");
             kwargsDemo.Add("trim_start", "2010-02-01");
             kwargsDemo.Add("trim_end", "2010-03-28");
-            myQuandl.getDataSet("GOOG/NYSE_IBM", kwargsDemo);
-            myQuandl.writeToDataFile("testData");
+            myQuandl.GetDataSet("GOOG/NYSE_IBM", kwargsDemo);
+            myQuandl.WriteToDataFile("testData");
         }
     }
 }

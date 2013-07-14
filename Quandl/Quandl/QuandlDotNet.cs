@@ -45,14 +45,14 @@ namespace QuandlDotNet
             authorToken = authortoken;
         }
 
-        public void setAuthorToken(string token)
+        public void SetAuthorToken(string token)
         {
             /* Used to set AuthorToken if you forgot to specify at construction
-             */
+             */S
             authorToken = token;
         }
 
-        public void getDataSet(string dataset, Dictionary<string, string> kwargs, string format = "csv")
+        public void GetDataSet(string dataset, Dictionary<string, string> kwargs, string format = "csv")
         {
             /* Princple function for getting data about a give stock 
              * dataset = dataset code as per Quandl.com website
@@ -92,7 +92,7 @@ namespace QuandlDotNet
 
         }
 
-        public void writeToDataFile(string fileName)
+        public void WriteToDataFile(string fileName)
         {
             /* For debug purposes only
              */
