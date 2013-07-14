@@ -45,40 +45,19 @@ namespace QuandlDotNet
         /// <summary>
         /// Set the authorization token for the API calls.
         /// </summary>
-        /// <param name="token"></param>
         public void SetAuthToken(string token)
         {
             AuthToken = token;
         }
 
+
         /// <summary>
-        /// Principle function for getting data about a given stock
-        /// dataset = dataset code as per Quandl.com website
-        /// format = format for data to be returned as, default = "csv". Options are "csv", "plain", "json", "xml"
+        /// Fetch the raw string data from Quandl.
         /// </summary>
-        /// <param name="dataset"> dataset code as per Quandl.com website</param>
-        /// <param name="settings"></param>
-        /// <param name="format"></param>
-        public List<T> GetData<T>(string dataset, Dictionary<string, string> settings, string format = "csv")
+        public string GetRawData(string dataset, Dictionary<string, string> settings, string format = "csv")
         {
-            /* Princple function for getting data about a give stock 
-             * dataset = dataset code as per Quandl.com website
-             * format = format for data to be returned as, default = "csv". Options are "csv", "plain", "json", "xml"
-             * 
-             * settings = A dictionary of keyords describing what to data to obtain as follows:
-             *  trim_start: format is "yyyy-mm-dd"
-             *  trim_end: format is "yyyy-mm-dd"
-             *  collapse: Options are "daily", "weekly", "monthly", "quarterly", "annual"
-             *  transformation: options are "diff", "rdiff", "cumul", and "normalize"
-             *  rows: Number of rows which will be returned, e.g. ("rows", "1")
-             *  sort_order: options are "asc", "desc". Default: "asc"
-             *  
-             *  In addition any other Quandl.com parameter can be passed
-             */
-            
             string requestUrl = "";
             string rawData = "";
-            List<T> data = new List<T>();
 
             //Set the output format:
             OutputFormat = format;
@@ -106,10 +85,30 @@ namespace QuandlDotNet
                 WebClient client = new WebClient();
                 rawData = client.DownloadString(requestUrl);
             }
-            catch (Exception err) 
+            catch (Exception err)
             {
                 throw new Exception("Sorry there was an error and we could not connect to Quandl: " + err.Message);
             }
+
+            return rawData;
+        }
+
+
+        /// <summary>
+        /// Principle function for getting data about a given stock
+        /// dataset = dataset code as per Quandl.com website
+        /// format = format for data to be returned as, default = "csv". Options are "csv", "plain", "json", "xml"
+        /// </summary>
+        /// <param name="dataset"> dataset code as per Quandl.com website</param>
+        /// <param name="settings"></param>
+        /// <param name="format"></param>
+        public List<T> GetData<T>(string dataset, Dictionary<string, string> settings)
+        {
+            //Initialize our generic holder:
+            List<T> data = new List<T>();
+
+            //Download the required strings:
+            string rawData = GetRawData(dataset, settings, "csv");
 
             //Convert into a list of class objects
             string[] lines = rawData.Split(new[] { '\r', '\n' });

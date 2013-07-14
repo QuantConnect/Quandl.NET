@@ -51,7 +51,7 @@ namespace QuandlDemo
 
 
     /// <summary>
-    /// Data format for this quandl request: implementing the quandl interface with a string csv constructor
+    /// Data format for this quandl request
     /// </summary>
     class Candle
     {
