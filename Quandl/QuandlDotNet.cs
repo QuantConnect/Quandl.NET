@@ -35,50 +35,30 @@ namespace QuandlDotNet
         private string OutputFormat;
 
         /// <summary>
-<<<<<<< HEAD
         /// Quandl Object Constructor
         /// </summary>
         /// <param name="authorToken">string auth token - if authortoken not specified on construction then access is limited to 10 per day</param>
-=======
-        /// if authorToken not specified on construction then access is limited to 10 per day
-        /// </summary>
-        /// <param name="authorToken"></param>
->>>>>>> 551846ef5d1cf30fcb0eba7c84230ad5f0115a31
         public Quandl(string authorToken = "")
         {
             AuthToken = authorToken;
         }
 
         /// <summary>
-<<<<<<< HEAD
         /// Set the authorization token for the API calls.
         /// </summary>
         /// <param name="token"></param>
-        public void SetAuthToken(string token) 
-=======
-        /// Used to set AuthorToken if you forgot to specify at construction
-        /// </summary>
-        /// <param name="token"></param>
         public void SetAuthToken(string token)
->>>>>>> 551846ef5d1cf30fcb0eba7c84230ad5f0115a31
         {
             AuthToken = token;
         }
 
         /// <summary>
-<<<<<<< HEAD
-        /// 
-        /// </summary>
-        /// <param name="dataset"></param>
-        /// <param name="settings"></param>
-=======
-        /// Princple function for getting data about a given stock
+        /// Principle function for getting data about a given stock
         /// dataset = dataset code as per Quandl.com website
         /// format = format for data to be returned as, default = "csv". Options are "csv", "plain", "json", "xml"
         /// </summary>
         /// <param name="dataset"> dataset code as per Quandl.com website</param>
-        /// <param name="kwargs"></param>
->>>>>>> 551846ef5d1cf30fcb0eba7c84230ad5f0115a31
+        /// <param name="settings"></param>
         /// <param name="format"></param>
         public void GetFromQuandl(string dataset, Dictionary<string, string> settings, string format = "csv")
         {
