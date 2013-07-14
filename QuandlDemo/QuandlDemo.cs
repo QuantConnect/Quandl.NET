@@ -55,7 +55,7 @@ namespace QuandlDemo
 
 
     /// <summary>
-    /// Data format for Csv financial quandl request
+    /// Example user defined class data format for CSV quandl request
     /// </summary>
     public class CsvFinancialFormat
     {
@@ -65,7 +65,7 @@ namespace QuandlDemo
         public Decimal Low = 0;
         public Decimal Close = 0;
         public Decimal Volume = 0;
-        public string InputString;
+        public string InputString = "";
 
 
         /// <summary>
