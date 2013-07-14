@@ -36,29 +36,39 @@ namespace QuandlDotNet
         private string Data;
         private string OutputFormat;
 
+        /// <summary>
+        /// if authorToken not specified on construction then access is limited to 10 per day
+        /// </summary>
+        /// <param name="authorToken"></param>
         public Quandl(string authorToken = "")
         {
-            
-            /* Constructor
-             * if authortoken not specified on construction then access is limited to 10 per day
-             */
             AuthToken = authorToken;
         }
 
+        /// <summary>
+        /// Used to set AuthorToken if you forgot to specify at construction
+        /// </summary>
+        /// <param name="token"></param>
         public void SetAuthToken(string token)
         {
-            /* Used to set AuthorToken if you forgot to specify at construction
-             */
             AuthToken = token;
         }
 
-        public void GetFromQuandl(string dataset, Dictionary<string, string> kwargs, string format = "csv")
+        /// <summary>
+        /// Princple function for getting data about a given stock
+        /// dataset = dataset code as per Quandl.com website
+        /// format = format for data to be returned as, default = "csv". Options are "csv", "plain", "json", "xml"
+        /// </summary>
+        /// <param name="dataset"> dataset code as per Quandl.com website</param>
+        /// <param name="kwargs"></param>
+        /// <param name="format"></param>
+        public void GetFromQuandl(string dataset, Dictionary<string, string> settings, string format = "csv")
         {
             /* Princple function for getting data about a give stock 
              * dataset = dataset code as per Quandl.com website
              * format = format for data to be returned as, default = "csv". Options are "csv", "plain", "json", "xml"
              * 
-             * kwargs = A dictionary of keyords describing what to data to obtain as follows:
+             * settings = A dictionary of keyords describing what to data to obtain as follows:
              *  trim_start: format is "yyyy-mm-dd"
              *  trim_end: format is "yyyy-mm-dd"
              *  collapse: Options are "daily", "weekly", "monthly", "quarterly", "annual"
@@ -73,7 +83,7 @@ namespace QuandlDotNet
             if (AuthToken == "")
             {
                 requestUrl = QUANDL_API_URL + String.Format("datasets/{0}.{1}?", dataset, format);
-                foreach (KeyValuePair<string, string> kvp in kwargs)
+                foreach (KeyValuePair<string, string> kvp in settings)
                 {
                     requestUrl = requestUrl + String.Format("{0}={1}&", kvp.Key, kvp.Value);
                 }
@@ -81,7 +91,7 @@ namespace QuandlDotNet
             else
             {
                 requestUrl = QUANDL_API_URL + String.Format("datasets/{0}.{1}?auth_token={2}", dataset, format, AuthToken);
-                foreach (KeyValuePair<string, string> kvp in kwargs)
+                foreach (KeyValuePair<string, string> kvp in settings)
                 {
                     requestUrl = requestUrl + String.Format("&{0}={1}", kvp.Key, kvp.Value);
                 }
