@@ -26,9 +26,12 @@ using System.IO;
 
 namespace QuandlDotNet
 {
+    /// <summary>
+    /// Wrapper Class for Quandl.com API
+    /// Currently only supports access to the Google (GOOG) or Yahoo (YAHOO) financial databases
+    /// </summary>
     public class Quandl
     {
-        // Wrapper Class for Accessing the Quandl.com API
         private const string QUANDL_API_URL = "http://www.quandl.com/api/v1/";
         private string AuthToken;
         private string OutputFormat;
@@ -53,13 +56,14 @@ namespace QuandlDotNet
 
         /// <summary>
         /// Fetch the raw string data from Quandl.
-        /// Currently only supports *.csv output format
+        /// Note that the GetRawData function should be used if a custom data formating class is required
+        /// Otherwise use the GetData function
         /// </summary>
         /// <param name="dataset"> dataset code as per Quandl.com website</param>
         /// <param name="settings"> as per the the Quandl.com website </param>
         /// <param name="format"> format for data to be returned as, default = "csv". Options are "csv", "plain", "json", "xml" </param>
         /// <returns></returns>
-        private string GetRawData(string dataset, Dictionary<string, string> settings, string format = "csv")
+        public string GetRawData(string dataset, Dictionary<string, string> settings, string format = "csv")
         {
             string requestUrl = "";
             string rawData = "";
@@ -110,12 +114,24 @@ namespace QuandlDotNet
             //Initialize our generic holder:
             List<T> data = new List<T>();
 
+            //Determine formatting type
+            //Will eventually support HTML, Json and XML type... maybe... someday...
+            string format;
+            if (typeof(T) == typeof(CsvFinancialFormat))
+            {
+                format = "csv";
+            }
+            else
+            {
+                throw new Exception("Invalid format type. Please use CsvFormat");
+            }
+
             //Download the required strings:
-            string rawData = GetRawData(dataset, settings, "csv");
+            string rawData = GetRawData(dataset, settings, format);
 
             //Convert into a list of class objects
             string[] lines = rawData.Split(new[] { '\r', '\n' });
-
+            Console.WriteLine(lines[0]);
             for (int i = 1; i < lines.Length; i++)
             {
                 string line = lines[i];
@@ -129,9 +145,9 @@ namespace QuandlDotNet
         }
     }
     /// <summary>
-    /// Data format for this quandl request
+    /// Data format for Csv financial quandl request
     /// </summary>
-    public class CsvFormat
+    public class CsvFinancialFormat
     {
         public DateTime Time = new DateTime();
         public Decimal Open = 0;
@@ -139,24 +155,46 @@ namespace QuandlDotNet
         public Decimal Low = 0;
         public Decimal Close = 0;
         public Decimal Volume = 0;
+        public string InputString;
+         
 
         /// <summary>
         /// Create our new generic data type:
         /// </summary>
         /// <param name="csvLine"></param>
-        public CsvFormat(string csvLine)
+        public CsvFinancialFormat(string csvLine)
         {
+            InputString = csvLine;
             try
             {
                 string[] values = csvLine.Split(',');
-                if (values.Length == 6)
+                if (values.Length >= 6)
                 {
                     Time = Convert.ToDateTime(values[0]);
-                    Open = Convert.ToDecimal(values[1]);
-                    High = Convert.ToDecimal(values[2]);
-                    Low = Convert.ToDecimal(values[3]);
-                    Close = Convert.ToDecimal(values[4]);
-                    Volume = Convert.ToDecimal(values[5]);
+                    try
+                    {
+                        Volume = Convert.ToDecimal(values[5]);
+                         // Catch formatting issues with regaurds to days in which no trades occur
+                        if (Volume > 0)
+                        {
+                            Open = Convert.ToDecimal(values[1]);
+                            High = Convert.ToDecimal(values[2]);
+                            Low = Convert.ToDecimal(values[3]);
+                            Close = Convert.ToDecimal(values[4]);
+                        }
+                        else
+                        {
+                            // No trades occured, make all open/high/low == close
+                            Open = Convert.ToDecimal(values[4]);
+                            High = Convert.ToDecimal(values[4]);
+                            Low = Convert.ToDecimal(values[4]);
+                            Close = Convert.ToDecimal(values[4]);
+                        }
+                    }
+                    catch (Exception err)
+                    {
+                        Console.WriteLine("Missing Data:" + csvLine);
+                    }
                 }
             }
             catch (Exception err)
@@ -165,14 +203,6 @@ namespace QuandlDotNet
                 Console.WriteLine("Er:" + csvLine);
             }
         }
-    
-        public DateTime GetTime()
-        {
-            return Time;
-        }
-        public Decimal GetHigh()
-        {
-            return High;
-        }
+       
     }
 }

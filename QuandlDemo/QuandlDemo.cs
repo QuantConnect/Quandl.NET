@@ -35,15 +35,18 @@ namespace QuandlDemo
             Dictionary<string, string> settings = new Dictionary<string, string>();
             settings.Add("collapse", "weekly");
             settings.Add("trim_start", "2010-02-01");
-            settings.Add("trim_end", "2010-03-28");
+            settings.Add("trim_end", "2010-04-28");
+            settings.Add("transformation", "normalize");
+            settings.Add("sort_order", "asc");
 
             // Fetch:
-            List<CsvFormat> data = myQuandl.GetData<CsvFormat>("GOOG/NYSE_IBM", settings);
+            List<CsvFinancialFormat> data = myQuandl.GetData<CsvFinancialFormat>("YAHOO/MX_IBM", settings); //"GOOG/NYSE_IBM"
 
             // Debug Purposes Only
-            foreach (CsvFormat tick in data)
+            foreach (CsvFinancialFormat tick in data)
             {
-                Console.WriteLine(tick.GetTime().ToShortDateString() + " H: " + tick.GetHigh());
+                //Console.WriteLine(tick.Time.ToShortDateString() + " H: " + tick.High);
+                Console.WriteLine(tick.InputString);
             }
             //Pause
             Console.ReadKey();
