@@ -52,7 +52,7 @@ namespace QuandlDotNet
             AuthToken = token;
         }
 
-        public void GetDataSet(string dataset, Dictionary<string, string> kwargs, string format = "csv")
+        public void GetFromQuandl(string dataset, Dictionary<string, string> kwargs, string format = "csv")
         {
             /* Princple function for getting data about a give stock 
              * dataset = dataset code as per Quandl.com website
@@ -100,6 +100,11 @@ namespace QuandlDotNet
             {
                 outfile.Write(Data);
             }
+        }
+
+        public string GetData()
+        {
+            return Data;
         }
     }
 }
