@@ -8,7 +8,7 @@
     <ProjectGuid>{EAF26F6F-B2E8-4B8C-9DF6-5CFE40CC7480}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>QuandlDotNet</RootNamespace>
+    <RootNamespace>QuandlDemo</RootNamespace>
     <AssemblyName>QuandlDemo</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
@@ -34,7 +34,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>QuandlDotNet.QuandlDemo</StartupObject>
+    <StartupObject>QuandlDemo.QuandlDemo</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
