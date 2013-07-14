@@ -38,10 +38,39 @@ namespace QuandlDemo
             settings.Add("trim_end", "2010-03-28");
 
             // Fetch:
-            myQuandl.GetFromQuandl("GOOG/NYSE_IBM", settings);
+            List<Candle> data = myQuandl.GetData<Candle>("GOOG/NYSE_IBM", settings);
 
             // Debug Purposes Only
-            myQuandl.WriteToDataFile("testData");
+            foreach (Candle tick in data) {
+                Console.WriteLine(tick.Time.ToShortDateString() + " H: " + tick.High);
+            }
+
+            //Pause
+            Console.ReadKey();
+        }
+    }
+
+
+    /// <summary>
+    /// Data format for this quandl request: implementing the quandl interface with a string csv constructor
+    /// </summary>
+    class Candle : IQuandlData
+    {
+        public DateTime Time;
+        public Decimal Open;
+        public Decimal High;
+        public Decimal Low;
+        public Decimal Close;
+        public int Volume;
+
+        public Candle(string csvLine) {
+            string[] values = csvLine.Split(',');
+            Time = Convert.ToDateTime(values[0]);
+            Open = Convert.ToDecimal(values[1]);
+            High = Convert.ToDecimal(values[2]);
+            Low = Convert.ToDecimal(values[3]);
+            Close = Convert.ToDecimal(values[4]);
+            Volume = Convert.ToInt32(values[5]);
         }
     }
 }
