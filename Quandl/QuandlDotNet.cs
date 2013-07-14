@@ -26,33 +26,39 @@ using System.IO;
 
 namespace QuandlDotNet
 {
-
     public class Quandl
     {
-        /* Wrapper class for accessing the Quandl.com API
-         */
-        private string QUANDL_API_URL = "http://www.quandl.com/api/v1/";
+        // Wrapper Class for Accessing the Quandl.com API
+        private const string QUANDL_API_URL = "http://www.quandl.com/api/v1/";
         private string AuthToken;
         private string Data;
         private string OutputFormat;
 
+        /// <summary>
+        /// Quandl Object Constructor
+        /// </summary>
+        /// <param name="authorToken">string auth token - if authortoken not specified on construction then access is limited to 10 per day</param>
         public Quandl(string authorToken = "")
         {
-            
-            /* Constructor
-             * if authortoken not specified on construction then access is limited to 10 per day
-             */
             AuthToken = authorToken;
         }
 
-        public void SetAuthToken(string token)
+        /// <summary>
+        /// Set the authorization token for the API calls.
+        /// </summary>
+        /// <param name="token"></param>
+        public void SetAuthToken(string token) 
         {
-            /* Used to set AuthorToken if you forgot to specify at construction
-             */
             AuthToken = token;
         }
 
-        public void GetFromQuandl(string dataset, Dictionary<string, string> kwargs, string format = "csv")
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dataset"></param>
+        /// <param name="settings"></param>
+        /// <param name="format"></param>
+        public void GetFromQuandl(string dataset, Dictionary<string, string> settings, string format = "csv")
         {
             /* Princple function for getting data about a give stock 
              * dataset = dataset code as per Quandl.com website
@@ -73,7 +79,7 @@ namespace QuandlDotNet
             if (AuthToken == "")
             {
                 requestUrl = QUANDL_API_URL + String.Format("datasets/{0}.{1}?", dataset, format);
-                foreach (KeyValuePair<string, string> kvp in kwargs)
+                foreach (KeyValuePair<string, string> kvp in settings)
                 {
                     requestUrl = requestUrl + String.Format("{0}={1}&", kvp.Key, kvp.Value);
                 }
@@ -81,7 +87,7 @@ namespace QuandlDotNet
             else
             {
                 requestUrl = QUANDL_API_URL + String.Format("datasets/{0}.{1}?auth_token={2}", dataset, format, AuthToken);
-                foreach (KeyValuePair<string, string> kvp in kwargs)
+                foreach (KeyValuePair<string, string> kvp in settings)
                 {
                     requestUrl = requestUrl + String.Format("&{0}={1}", kvp.Key, kvp.Value);
                 }
@@ -89,9 +95,12 @@ namespace QuandlDotNet
 
             WebClient client = new WebClient();
             Data = client.DownloadString(requestUrl);
-
         }
 
+        /// <summary>
+        /// Save the data to a file
+        /// </summary>
+        /// <param name="fileName">Local location to dump data</param>
         public void WriteToDataFile(string fileName)
         {
             /* For debug purposes only
