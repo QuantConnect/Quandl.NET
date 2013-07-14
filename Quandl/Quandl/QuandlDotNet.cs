@@ -32,24 +32,24 @@ namespace QuandlDotNet
         /* Wrapper class for accessing the Quandl.com API
          */
         private string QUANDL_API_URL = "http://www.quandl.com/api/v1/";
-        private string authorToken;
-        private string data;
-        private string outputFormat;
+        private string AuthToken;
+        private string Data;
+        private string OutputFormat;
 
-        public Quandl(string authortoken = "")
+        public Quandl(string authorToken = "")
         {
             
             /* Constructor
              * if authortoken not specified on construction then access is limited to 10 per day
              */
-            authorToken = authortoken;
+            AuthToken = authorToken;
         }
 
-        public void SetAuthorToken(string token)
+        public void SetAuthToken(string token)
         {
             /* Used to set AuthorToken if you forgot to specify at construction
-             */S
-            authorToken = token;
+             */
+            AuthToken = token;
         }
 
         public void GetDataSet(string dataset, Dictionary<string, string> kwargs, string format = "csv")
@@ -68,9 +68,9 @@ namespace QuandlDotNet
              *  
              *  In addition any other Quandl.com parameter can be passed
              */
-            outputFormat = format;
+            OutputFormat = format;
             string requestUrl;
-            if (authorToken == "")
+            if (AuthToken == "")
             {
                 requestUrl = QUANDL_API_URL + String.Format("datasets/{0}.{1}?", dataset, format);
                 foreach (KeyValuePair<string, string> kvp in kwargs)
@@ -80,7 +80,7 @@ namespace QuandlDotNet
             }
             else
             {
-                requestUrl = QUANDL_API_URL + String.Format("datasets/{0}.{1}?auth_token={2}", dataset, format, authorToken);
+                requestUrl = QUANDL_API_URL + String.Format("datasets/{0}.{1}?auth_token={2}", dataset, format, AuthToken);
                 foreach (KeyValuePair<string, string> kvp in kwargs)
                 {
                     requestUrl = requestUrl + String.Format("&{0}={1}", kvp.Key, kvp.Value);
@@ -88,7 +88,7 @@ namespace QuandlDotNet
             }
 
             WebClient client = new WebClient();
-            data = client.DownloadString(requestUrl);
+            Data = client.DownloadString(requestUrl);
 
         }
 
@@ -96,9 +96,9 @@ namespace QuandlDotNet
         {
             /* For debug purposes only
              */
-            using (StreamWriter outfile = new StreamWriter(fileName + "." + outputFormat))
+            using (StreamWriter outfile = new StreamWriter(fileName + "." + OutputFormat))
             {
-                outfile.Write(data);
+                outfile.Write(Data);
             }
         }
     }
