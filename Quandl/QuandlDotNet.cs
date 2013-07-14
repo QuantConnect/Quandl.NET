@@ -174,7 +174,8 @@ namespace QuandlDotNet
                     try
                     {
                         Volume = Convert.ToDecimal(values[5]);
-                         // Catch formatting issues with regaurds to days in which no trades occur
+                        // Catch formatting issues with regards to days in which no trades occur
+                        // Doesn't work for YAHOO, only GOOG
                         if (Volume > 0)
                         {
                             Open = Convert.ToDecimal(values[1]);
