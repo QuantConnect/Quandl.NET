@@ -36,10 +36,10 @@ namespace QuandlDotNet
         /// <summary>
         /// Quandl Object Constructor
         /// </summary>
-        /// <param name="authorToken">string auth token - if authortoken not specified on construction then access is limited to 10 per day</param>
-        public Quandl(string authorToken = "")
+        /// <param name="authenticationToken">string auth token - if authentication token not specified on construction then access is limited to 10 per day</param>
+        public Quandl(string authenticationToken = "")
         {
-            AuthToken = authorToken;
+            AuthToken = authenticationToken;
         }
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace QuandlDotNet
         /// <param name="dataset"> dataset code as per Quandl.com website</param>
         /// <param name="settings"></param>
         /// <param name="format"></param>
-        public List<T> GetData<T>(string dataset, Dictionary<string, string> settings, string format = "csv") where T : IQuandlData
+        public List<T> GetData<T>(string dataset, Dictionary<string, string> settings, string format = "csv")
         {
             /* Princple function for getting data about a give stock 
              * dataset = dataset code as per Quandl.com website
@@ -111,11 +111,16 @@ namespace QuandlDotNet
                 throw new Exception("Sorry there was an error and we could not connect to Quandl: " + err.Message);
             }
 
+            //Convert into a list of class objects
             string[] lines = rawData.Split(new[] { '\r', '\n' });
 
-            foreach (string line in lines) 
+            for (int i = 1; i < lines.Length; i++)
             {
-                data.Add(new T(line));
+                string line = lines[i];
+                if (line.Trim().Length > 0)
+                {
+                    data.Add((T)Activator.CreateInstance(typeof(T), line));
+                }
             }
 
             return data;

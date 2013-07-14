@@ -37,7 +37,6 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="IQuandlData.cs" />
     <Compile Include="QuandlDotNet.cs" />
   </ItemGroup>
   <ItemGroup>
