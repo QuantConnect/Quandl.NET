@@ -41,9 +41,11 @@ namespace QuandlDemo
             
             // Get the data from the search
             string queryData = myQuandl.SearchQuandl(queryStr, searchParameters);
+
+            // Dump to console. Currently not very useful.
             Console.Write(queryData);
 
-            //Pause, to ensure that the above request has occurred. Only a single request is from Quandl.com is allowed at any given time
+            //Pause, to ensure that the above request has occurred. Only a single request from Quandl.com is allowed at any given time
             Console.ReadKey();
 
             // Add the required settings to pull down data:
