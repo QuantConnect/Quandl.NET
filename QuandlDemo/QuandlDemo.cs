@@ -29,8 +29,23 @@ namespace QuandlDemo
     {
         static void Main(string[] args)
         {
+            // Create a Qundl object
             Quandl myQuandl = new Quandl();
+
+            // Search Example
+            // Create a search string
+            string queryStr = "Oil United Nations";
+
+            // Add the require search parameters to the settings dictionary
+            Dictionary<string, string> searchParameters = new Dictionary<string, string>();
             
+            // Get the data from the search
+            string queryData = myQuandl.SearchQuandl(queryStr, searchParameters);
+            Console.Write(queryData);
+
+            //Pause, to ensure that the above request has occurred. Only a single request is from Quandl.com is allowed at any given time
+            Console.ReadKey();
+
             // Add the required settings to pull down data:
             Dictionary<string, string> settings = new Dictionary<string, string>();
             settings.Add("collapse", "weekly");

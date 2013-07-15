@@ -134,5 +134,62 @@ namespace QuandlDotNet
 
             return data;
         }
+
+        public string SearchQuandl(string query, Dictionary<string,string> settings, string format = "xml")
+        {
+            //Remove any unwanted characters from the query string
+            string formatedQuery = FormatQuery(query);
+
+            //Generate initial request url string
+            string searchUrl = QUANDL_API_URL + String.Format("datasets.{0}?query={1}", format, formatedQuery);
+
+            //Quandl data string to be returned
+            string rawData = "";
+
+            //Set the output format:
+            OutputFormat = format;
+
+            //Include AuthToken if provided
+            if (AuthToken != "")
+            {
+                searchUrl = searchUrl + String.Format("&auth_token={0}", AuthToken);
+            }
+
+            //Build search url from settings dictionary
+            foreach (KeyValuePair<string, string> kvp in settings)
+            {
+                searchUrl = searchUrl + String.Format("&{0}={1}", kvp.Key, kvp.Value);
+            }
+
+            //Request data from Quandl.com
+            try
+            {
+                //Prevent 404 Errors:
+                WebClient client = new WebClient();
+                rawData = client.DownloadString(searchUrl);
+            }
+            catch (Exception err)
+            {
+                throw new Exception("Sorry there was an error and we could not connect to Quandl: " + err.Message);
+            }
+
+            return rawData;
+
+        }
+
+        /// <summary>
+        /// Reformat query strings so they are compatible with Quandl request url format
+        /// </summary>
+        /// <param name="query"> String to be formated </param>
+        /// <returns> Formated string </returns>
+        private string FormatQuery(string query)
+        {
+            StringBuilder formatedQuerry = new StringBuilder(query);
+            formatedQuerry.Replace(' ', '+');
+            formatedQuerry.Replace('&', '+');
+
+            Console.WriteLine(formatedQuerry);
+            return formatedQuerry.ToString();
+        }
     }
 }
