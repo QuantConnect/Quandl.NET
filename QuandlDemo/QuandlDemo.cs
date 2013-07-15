@@ -34,10 +34,13 @@ namespace QuandlDemo
 
             // Search Example
             // Create a search string
-            string queryStr = "Oil United Nations";
+            string queryStr = "Oil";
 
             // Add the require search parameters to the settings dictionary
+            // There is currently a bug which does not allow for complex search strings and search parameters to be combined
             Dictionary<string, string> searchParameters = new Dictionary<string, string>();
+            searchParameters.Add("page", "2"); //Return page 2
+            searchParameters.Add("source_code", "GOOG"); //only return google search data
             
             // Get the data from the search
             string queryData = myQuandl.SearchQuandl(queryStr, searchParameters);
@@ -45,7 +48,7 @@ namespace QuandlDemo
             // Dump to console. Currently not very useful.
             Console.Write(queryData);
 
-            //Pause, to ensure that the above request has occurred. Only a single request from Quandl.com is allowed at any given time
+            //Pause, to ensure that the above request has occurred. Only a single request from Quandl.com is allowed at any given time and there is some sort of time limit too
             Console.ReadKey();
 
             // Add the required settings to pull down data:
