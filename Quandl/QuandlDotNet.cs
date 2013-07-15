@@ -1,7 +1,7 @@
 ﻿/*
  * Created by Ryan Hill, Copyright July 2013
  * 
- *  This file is part of QuandlDotNet package.
+ *  This file is part of QuandlDotNet package. Main API classes/namespace.
  * 
  *  QuandlDotNet is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -28,7 +28,8 @@ namespace QuandlDotNet
 {
     /// <summary>
     /// Wrapper Class for Quandl.com API
-    /// Currently only supports access to the Google (GOOG) or Yahoo (YAHOO) financial databases
+    /// Basic functionality implemented for downloading Quandl.com data
+    /// GOOG and YAHOO stocks using CSV format have been tested.
     /// </summary>
     public class Quandl
     {
@@ -56,13 +57,11 @@ namespace QuandlDotNet
 
         /// <summary>
         /// Fetch the raw string data from Quandl.
-        /// Note that the GetRawData function should be used if a custom data formating class is required
-        /// Otherwise use the GetData function
         /// </summary>
         /// <param name="dataset"> dataset code as per Quandl.com website</param>
         /// <param name="settings"> as per the the Quandl.com website </param>
         /// <param name="format"> format for data to be returned as, default = "csv". Options are "csv", "plain", "json", "xml" </param>
-        /// <returns></returns>
+        /// <returns> Returns string of data from Quandl.com </returns>
         public string GetRawData(string dataset, Dictionary<string, string> settings, string format = "csv")
         {
             string requestUrl = "";
@@ -103,12 +102,13 @@ namespace QuandlDotNet
         }
 
         /// <summary>
-        /// Principle function for getting data about a given stock
+        /// Principle function for getting data from Quandl.com
         /// </summary>
-        /// <typeparam name="T"> Currently only CsvFormat type is supported </typeparam>
-        /// <param name="dataset"> dataset code as per Quandl.com website </param>
+        /// <typeparam name="T"> User defined data class</typeparam>
+        /// <param name="dataset"> dataset code as per Quandl.com website</param>
         /// <param name="settings"> as per the the Quandl.com website </param>
-        /// <returns></returns>
+        /// <param name="format"> format for data to be returned as, default = "csv". Options are "csv", "plain", "json", "xml" </param>
+        /// <returns> Returns a list of objects T </returns>
         public List<T> GetData<T>(string dataset, Dictionary<string, string> settings, string format = "csv")
         {
             //Initialize our generic holder:

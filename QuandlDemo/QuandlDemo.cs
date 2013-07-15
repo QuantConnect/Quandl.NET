@@ -1,7 +1,7 @@
 ﻿/*
  * Created by Ryan Hill, Copyright July 2013
  * 
- *  This file is part of QuandlDotNet package.
+ *  This file is part of QuandlDotNet package, to demonstrate basic access using QuandlDotNet classes.
  * 
  *  QuandlDotNet is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
