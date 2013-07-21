@@ -34,10 +34,9 @@ namespace QuandlDemo
 
             // Search Example
             // Create a search string
-            string queryStr = "Oil";
+            string queryStr = "Oil United Nations";
 
             // Add the require search parameters to the settings dictionary
-            // There is currently a bug which does not allow for complex search strings and search parameters to be combined
             Dictionary<string, string> searchParameters = new Dictionary<string, string>();
             searchParameters.Add("page", "2"); //Return page 2
             searchParameters.Add("source_code", "GOOG"); //only return google search data
