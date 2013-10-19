@@ -19,8 +19,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using QuandlDotNet;
 
 namespace QuandlDemo
@@ -40,7 +38,7 @@ namespace QuandlDemo
             settings.Add("sort_order", "asc");
 
             // Fetch:
-            List<CsvFinancialFormat> data = myQuandl.GetData<CsvFinancialFormat>("YAHOO/MX_IBM", settings); //"GOOG/NYSE_IBM"
+            IList<CsvFinancialFormat> data = myQuandl.GetData<CsvFinancialFormat>("YAHOO/MX_IBM", settings); //"GOOG/NYSE_IBM"
 
             // Debug Purposes Only
             foreach (CsvFinancialFormat tick in data)
