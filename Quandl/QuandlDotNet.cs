@@ -106,10 +106,7 @@ namespace QuandlDotNet
         /// <returns> Returns a list of objects T </returns>
         public IList<T> GetData<T>(string dataset, IDictionary<string, string> settings, string format = "csv")
         {
-						//Get the System Type of the user defined data class.
-						var dataType = typeof (T);
-
-            //Initialize our generic holder:
+						//Initialize our generic holder:
             var data = new List<T>();
 
             //For user defined data should use CSV since easier to parse into class objects
@@ -122,8 +119,8 @@ namespace QuandlDotNet
             string[] lines = rawData.Split(new[] { '\r', '\n' });
             Console.WriteLine(lines[0]);
 
-						var ctor = dataType.GetConstructors().First();
-						var createdActivator = GetActivator<T>(ctor);
+						
+						var createdActivator = GetActivator<T>();
             for (int i = 1; i < lines.Length; i++)
             {
                 string line = lines[i];
@@ -136,11 +133,17 @@ namespace QuandlDotNet
             return data;
         }
 
+				
 				//A faster version to instantiate objects dynamically, compared to Activator.CreateInstance
-				//Reference: http://rogeralsing.com/2008/02/28/linq-expressions-creating-objects/
-				private static Func<object[], T> GetActivator<T>(ConstructorInfo ctor)
+	    /// <summary>
+	    /// Static function to generate a delegate to construct a given type. Entirely based on : http://rogeralsing.com/2008/02/28/linq-expressions-creating-objects/ with minor tweaks
+	    /// </summary>
+	    /// <typeparam name="T"> User defined data class</typeparam>
+	    /// <returns> Returns a list of objects T </returns>
+	    private static Func<object[], T> GetActivator<T>()
 				{
-					var type = ctor.DeclaringType;
+					var dataType = typeof(T);
+					var ctor = dataType.GetConstructors().First();
 					var paramsInfo = ctor.GetParameters();
 
 					//create a single param of type object[]
